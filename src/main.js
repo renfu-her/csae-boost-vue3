@@ -16,6 +16,8 @@ const routes = [
   { path: '/projects', component: HomePage },
   { path: '/projects/:id', component: ProjectPage },
   { path: '/login', component: UserLogin },
+  { path: '/project/all', component: HomePage },
+  { path: '/project/:slug', component: HomePage },
 
 ];
 

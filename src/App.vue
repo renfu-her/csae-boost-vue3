@@ -25,8 +25,17 @@
                 <li><a class="dropdown-item" href="/project/preview">瀏覽外包發案</a></li>
               </ul>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/projects">找專案</a>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                找專案
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="/project/all">專案全部</a></li>
+                <li v-for="category in projectCategories" :key="category.id">
+                  <a class="dropdown-item" :href="`/project/${category.slug}`">{{ category.name }}</a>
+                </li>
+              </ul>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">找尋人才</a>
@@ -58,9 +67,15 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import axios from 'axios';
 
 export default {
   name: 'App',
+  data() {
+    return {
+      projectCategories: []
+    };
+  },
   computed: {
     ...mapGetters(['token'])
   },
@@ -73,6 +88,14 @@ export default {
     requireLogin() {
       alert('尚未登入，請先登入');
       this.$router.push('/login');
+    },
+    async fetchProjectCategories() {
+      try {
+        const response = await axios.get('/project-categories');
+        this.projectCategories = response.data;
+      } catch (error) {
+        console.error('Error fetching project categories:', error);
+      }
     }
   },
   created() {
@@ -80,6 +103,7 @@ export default {
       console.log('Token exists:', this.token);
       // 可以在这里进行其他需要的初始化操作
     }
+    this.fetchProjectCategories();
   }
 };
 </script>

@@ -104,4 +104,8 @@ th {
 a:link{
   text-decoration: none;
 }
+
+.text-bold {
+  font-weight: bold;
+}
 </style>
