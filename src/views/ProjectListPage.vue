@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import ProjectList from '@/components/ProjectList.vue';
+import ProjectList from '@/components/pages/ProjectList.vue';
 
 export default {
     name: 'ProjectListPage',

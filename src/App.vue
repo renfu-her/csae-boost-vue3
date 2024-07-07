@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
-      <div class="container-fluid">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success bg-opacity-75 bg-gradient text-white">
+      <div class="container">
         <a class="navbar-brand" href="/projects">接案網</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
           aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -16,13 +16,11 @@
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown" v-if="!token">
                 <li><a class="dropdown-item" href="#" @click="requireLogin">新增外包發案</a></li>
-                <li><a class="dropdown-item" href="#" @click="requireLogin">維護外包發案</a></li>
                 <li><a class="dropdown-item" href="#" @click="requireLogin">瀏覽外包發案</a></li>
               </ul>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown" v-if="token">
-                <li><a class="dropdown-item" href="/project/create">新增外包發案</a></li>
-                <li><a class="dropdown-item" href="/project/edit">維護外包發案</a></li>
-                <li><a class="dropdown-item" href="/project/preview">瀏覽外包發案</a></li>
+                <li><a class="dropdown-item" href="/user/project/new">新增外包發案</a></li>
+                <li><a class="dropdown-item" href="/user/project/view">瀏覽外包發案</a></li>
               </ul>
             </li>
             <li class="nav-item dropdown">

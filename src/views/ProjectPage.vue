@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import ProjectDetail from '@/components/ProjectDetail.vue';
+import ProjectDetail from '@/components/pages/ProjectDetail.vue';
 
 export default {
   name: 'ProjectPage',
