@@ -159,7 +159,7 @@ export default {
   },
   created() {
     if (this.token) {
-      console.log("Token exists:", this.token);
+      // console.log("Token exists:", this.token);
       // 可以在這裡進行其他需要的初始化操作
     }
     this.fetchProjectCategories();
