@@ -12,7 +12,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import axios from 'axios';
 import store from './store'; 
 
-axios.defaults.baseURL = 'https://case-boost.test/api';
+axios.defaults.baseURL = 'https://case-boost.com/api';
 
 const routes = [
   { path: '/', component: HomePage },
