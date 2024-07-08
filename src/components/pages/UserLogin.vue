@@ -1,8 +1,11 @@
 <template>
-  <div class="login-container">
+  <div class="container mt-5">
+    <div class="d-flex justify-content-center">
+      <h3>登入</h3>
+    </div>
     <form @submit.prevent="login">
       <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
+        <label for="email" class="form-label">E-mail</label>
         <input
           type="email"
           v-model="email"
@@ -12,7 +15,7 @@
         />
       </div>
       <div class="mb-3">
-        <label for="password" class="form-label">Password</label>
+        <label for="password" class="form-label">密碼</label>
         <input
           type="password"
           v-model="password"
@@ -25,32 +28,34 @@
         <button type="submit" class="btn btn-primary w-100">登入</button>
       </div>
     </form>
-    <div v-if="errorMessage" class="alert alert-danger mt-3 text-center">
-      {{ errorMessage }}
-    </div>
-    <div v-if="successMessage" class="alert alert-info mt-3 text-center">
-      {{ successMessage }}
-    </div>
-  </div>
-  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-    <div
-      id="liveMessage"
-      class="toast"
-      role="alert"
-      aria-live="assertive"
-      aria-atomic="true"
-    >
-      <div class="toast-header">
-        <strong class="me-auto">通知</strong>
-        <small class="text-muted">剛剛</small>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="toast"
-          aria-label="Close"
-        ></button>
+    <div class="container mt-5">
+      <div v-if="errorMessage" class="alert alert-danger mt-3 text-center">
+        {{ errorMessage }}
       </div>
-      <div class="toast-body"></div>
+      <div v-if="successMessage" class="alert alert-info mt-3 text-center">
+        {{ successMessage }}
+      </div>
+    </div>
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+      <div
+        id="liveMessage"
+        class="toast"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+      >
+        <div class="toast-header">
+          <strong class="me-auto">通知</strong>
+          <small class="text-muted">剛剛</small>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="toast"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="toast-body"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -59,7 +64,6 @@
 import axios from "axios";
 import { mapActions } from "vuex";
 // import { Toast } from "bootstrap";
-
 
 export default {
   name: "UserLogin",
@@ -103,19 +107,14 @@ export default {
     //   const toastEl = document.getElementById("liveMessage");
     //   const toast = new Toast(toastEl);
     //   toast.show();
-    
+
     // },
   },
 };
 </script>
 
-<style>
-.login-container {
-  max-width: 400px;
-  margin: 50px auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  background-color: #fff;
+<style scoped>
+.container {
+  max-width: 500px;
 }
 </style>

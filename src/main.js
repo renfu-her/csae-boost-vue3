@@ -4,8 +4,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 import HomePage from './views/HomePage.vue';
 import ProjectPage from './views/ProjectPage.vue';
 import ProjectViewPage from './views/ProjectViewPage.vue';
-import UserLogin from './components/pages/UserLogin.vue'; 
-import ProjectEditor from './components/pages/ProjectEditor.vue'; // 新增這行
+import AuthPage from './views/AuthPage.vue';
+import ProjectEditor from './components/pages/ProjectEditor.vue'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import axios from 'axios';
@@ -17,12 +17,12 @@ const routes = [
   { path: '/', component: HomePage },
   { path: '/projects', component: HomePage },
   { path: '/projects/:id', component: ProjectPage },
-  { path: '/login', component: UserLogin },
   { path: '/project/all', component: HomePage },
   { path: '/project/:slug', component: HomePage },
-  { path: '/user/project/new', component: ProjectEditor }, // 新增專案路由
+  { path: '/user/project/new', component: ProjectEditor },
   { path: '/user/project/edit/:id', component: ProjectEditor },
   { path: '/user/project/view', component: ProjectViewPage },
+  { path: '/join', component: AuthPage },
 ];
 
 const router = createRouter({

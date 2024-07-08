@@ -6,7 +6,7 @@
   </template>
   
   <script>
-  import ProjectList from '@/components/pages/ProjectList.vue';
+  import ProjectList from '@/components/pages/ProjectView.vue';
   import axios from 'axios';
   
   export default {

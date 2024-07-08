@@ -35,14 +35,12 @@
                 </li>
               </ul>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a class="nav-link" href="#">找尋人才</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">說明</a>
-            </li>
+            </li> -->
+            
             <li class="nav-item" v-if="!token">
-              <router-link class="nav-link" to="/login">登入</router-link>
+              <a class="nav-link" href="/join">登入/註冊</a>
             </li>
             <li class="nav-item dropdown" v-if="token">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
@@ -54,6 +52,9 @@
                 <li><a class="dropdown-item" href="/user/profile">會員資料</a></li>
                 <li><a class="dropdown-item" href="#" @click="logout">登出</a></li>
               </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/feedback">建議回饋</a>
             </li>
           </ul>
         </div>
@@ -81,11 +82,11 @@ export default {
     ...mapActions(['removeToken']),
     logout() {
       this.removeToken();
-      this.$router.push('/login');
+      this.$router.push('/join');
     },
     requireLogin() {
       alert('尚未登入，請先登入');
-      this.$router.push('/login');
+      this.$router.push('/join');
     },
     async fetchProjectCategories() {
       try {

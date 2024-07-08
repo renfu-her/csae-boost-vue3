@@ -6,7 +6,8 @@
           <th scope="col" class="col-3">專案名稱</th>
           <th scope="col" class="col-2">案件預算</th>
           <th scope="col" class="col-2">自備場所</th>
-          <th scope="col" class="col-5">接案身份</th>
+          <th scope="col" class="col-3">接案身份</th>
+          <th scope="col" class="col-2">編輯</th>
         </tr>
       </thead>
       <tbody>
@@ -17,6 +18,10 @@
           <td><router-link :to="'/projects/' + project.id">{{ project.budget_range }}</router-link></td>
           <td><router-link :to="'/projects/' + project.id">{{ project.work_location }}</router-link></td>
           <td><router-link :to="'/projects/' + project.id">{{ project.target_audience }}</router-link></td>
+          <td>
+            <button class="btn btn-primary mx-2">編輯</button>
+            <button class="btn btn-danger mx-2" >刪除</button>
+          </td>
         </tr>
       </tbody>
     </table>
