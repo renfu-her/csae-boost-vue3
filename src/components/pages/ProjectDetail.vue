@@ -128,6 +128,12 @@
           </div>
           <div class="col-8">{{ project.updated_at }}</div>
         </div>
+        <div class="row py-3 border-bottom">
+          <div class="col-4 d-flex justify-content-center align-items-center">
+            <strong>案件發佈狀態</strong>
+          </div>
+          <div class="col-8">{{ project.status === 1 ? '公佈' : '關閉專案' }}</div>
+        </div>
       </div>
     </div>
   </div>
