@@ -52,7 +52,7 @@
               required
             />
           </div>
-          <div class="mb-3">
+          <!-- <div class="mb-3">
             <label for="phone" class="form-label">電話</label>
             <input
               type="text"
@@ -61,7 +61,7 @@
               id="phone"
               required
             />
-          </div>
+          </div> -->
           <div class="mb-3">
             <label for="email" class="form-label">E-mail</label>
             <input
@@ -245,7 +245,7 @@
 
 <script>
 import axios from "axios";
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 
@@ -257,33 +257,37 @@ export default {
     const store = useStore();
     const isEditMode = ref(false);
     const project = ref({
-      category_id: "", // 新增 category_id 屬性
+      category_id: "",
       name: "",
       contact_person: "",
       mobile: "",
-      phone: "",
+    //   phone: "",
       email: "",
       description: `為了讓接案方明確了解專案內容需求；建議您詳細填寫下列格式需求！
-    1.工作內容：(接案方需完成的工作事項)
-    2.配合時間：(預計執行工期或結案日)
-    3.配合地點：(需駐點位置、限定配合地區或自備場所作業)
-    4.專案預算：(您預計或可接受的預算範圍)
-    5.注意事項：(電話聯絡時間或合作時溝通方式等其他注意事項)
-    （聯絡時請說明由Case888外包網得知訊息，謝謝！）`,
+          1.工作內容：(接案方需完成的工作事項)
+          2.配合時間：(預計執行工期或結案日)
+          3.配合地點：(需駐點位置、限定配合地區或自備場所作業)
+          4.專案預算：(您預計或可接受的預算範圍)
+          5.注意事項：(電話聯絡時間或合作時溝通方式等其他注意事項)
+          （聯絡時請說明由Case888外包網得知訊息，謝謝！）`,
       required_skills: "",
       target_audience: [],
-      work_location: "", // 添加 work_location 屬性
+      work_location: "",
       experience_years: 0,
       notes: "",
       budget_range: "",
-      start_date: "", // 新增洽詢起始日期
-      inquiry_deadline: "", // 新增洽詢期限
-      token: "", // 添加 token 屬性
+      start_date: "",
+      inquiry_deadline: "",
+      token: "",
       status: 1,
     });
 
-    const categories = ref([]); // 存儲類別列表
+    const categories = ref([]);
     const token = computed(() => store.getters.token);
+
+    watch(token, (newToken) => {
+      project.value.token = newToken;
+    });
 
     const budgetRanges = [
       "預算另議",
@@ -304,7 +308,7 @@ export default {
     ];
 
     onMounted(async () => {
-      project.value.token = token.value; // 將 token 添加到 project 中
+      project.value.token = token.value;
       const projectId = route.params.id;
       if (projectId) {
         isEditMode.value = true;
@@ -312,43 +316,59 @@ export default {
           const response = await axios.get(`/projects/${projectId}`);
           project.value = response.data;
           project.value.target_audience =
-            response.data.target_audience.split(","); // 將字符串轉換為數組
+            response.data.target_audience.split(",");
         } catch (error) {
           console.error(error);
         }
       }
 
-      // 獲取項目類別
       try {
         const response = await axios.get("/project-categories");
         categories.value = response.data;
       } catch (error) {
         console.error("Error fetching project categories:", error);
       }
+
+      // 根據 token 獲取用戶資料並設置到表單中
+      try {
+        const userResponse = await axios.get(`/user/info/${token.value}`);
+        const userData = userResponse.data;
+        project.value.contact_person = userData.user.name;
+        project.value.mobile = userData.user.mobile;
+        // project.value.phone = userData.user.phone;
+        project.value.email = userData.user.email;
+      } catch (error) {
+        console.error("Error fetching user info:", error);
+      }
     });
 
-    const handleSubmit = () => {
-      // 將 target_audience 轉換為逗號分隔的字符串
+    const handleSubmit = async () => {
       project.value.target_audience = project.value.target_audience.join(",");
 
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token.value}`,
+        },
+      };
+
       if (isEditMode.value) {
-        axios
-          .put(`/projects/${project.value.id}`, project.value)
-          .then(() => {
-            router.push(`/projects/${project.value.id}`);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+        try {
+          await axios.post(
+            `/projects/${project.value.id}`,
+            project.value,
+            config
+          );
+          router.push(`/user/project/view`);
+        } catch (error) {
+          console.error(error);
+        }
       } else {
-        axios
-          .post(`/projects`, project.value)
-          .then((response) => {
-            router.push(`/projects/${response.data.id}`);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+        try {
+          const response = await axios.post(`/projects`, project.value, config);
+          router.push(`/projects/${response.data.id}`);
+        } catch (error) {
+          console.error(error);
+        }
       }
     };
 

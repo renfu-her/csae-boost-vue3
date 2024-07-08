@@ -20,7 +20,7 @@
             <strong
               >您尚未加入會員或登入會員，登入後加入贊助會員 <br />
               您就可以看到詳細聯絡資料以及發布專案聯絡人資料 <br />
-              <a class="btn btn-primary w-100 fs-4" href="/login">登入或者加入會員</a>
+              <a class="btn btn-primary w-100 fs-4" href="/join">登入或者加入會員</a>
             </strong>
           </div>
         </div>
