@@ -1,4 +1,3 @@
-<!-- components/pages/AuthPage.vue -->
 <template>
   <div class="auth-container">
     <div class="auth-form">
@@ -41,12 +40,20 @@
             required
           />
         </div>
+        <div v-if="!isLogin" class="mb-3">
+            <span class="font-password">
+                * 密碼需包含至少一個大寫字母、小寫字母、數字，且長度需大於 8 個字元
+            </span>
+        </div>
         <button type="submit" class="btn btn-primary w-100">
           {{ isLogin ? "登入" : "註冊" }}
         </button>
       </form>
       <div v-if="errorMessage" class="alert alert-danger mt-3">
         {{ errorMessage }}
+      </div>
+      <div v-if="successMessage" class="alert alert-success mt-3">
+        {{ successMessage }}
       </div>
       <p class="toggle-link" @click="toggleForm">
         {{ isLogin ? "還沒有帳號？註冊" : "已有帳號？登入" }}
@@ -91,6 +98,7 @@ export default {
         this.$router.push("/");
       } catch (error) {
         this.errorMessage = "登入失敗，請檢查您的帳號或密碼。";
+        this.successMessage = "";
       }
       setTimeout(() => {
         this.errorMessage = "";
@@ -99,6 +107,7 @@ export default {
     async registerUser() {
       if (this.password !== this.confirmPassword) {
         this.errorMessage = "密碼與確認密碼不符合";
+        this.successMessage = "";
         return;
       }
 
@@ -109,12 +118,16 @@ export default {
           password: this.password,
         });
         if (response.data.code == 200) {
-          this.$router.push("/join");
+          this.isLogin = true;
+          this.successMessage = "註冊成功，請登入";
+          this.errorMessage = "";
         } else {
           this.errorMessage = "輸入 E-mail 重複";
+          this.successMessage = "";
         }
       } catch (error) {
         this.errorMessage = "註冊錯誤";
+        this.successMessage = "";
         console.error(error);
       }
     },
@@ -132,7 +145,6 @@ export default {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  /* background-color: #4caf50; */ /* 替換為你的背景色 */
 }
 
 .auth-form {
@@ -153,14 +165,17 @@ export default {
 }
 
 .auth-form .btn-primary {
-  background-color: #4caf50; /* 替換為你的按鈕顏色 */
-  border-color: #4caf50; /* 替換為你的按鈕顏色 */
+  background-color: #4caf50;
+  border-color: #4caf50;
 }
 
 .auth-form .toggle-link {
   text-align: center;
   margin-top: 1rem;
-  color: #4caf50; /* 替換為你的鏈接顏色 */
+  color: #4caf50;
   cursor: pointer;
+}
+.font-password {
+    color: red;
 }
 </style>
