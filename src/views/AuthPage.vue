@@ -26,24 +26,32 @@
           <input
             type="password"
             class="form-control"
+            :class="{ 'is-invalid': !isPasswordValid && password }"
             placeholder="密碼"
             v-model="password"
             required
           />
+          <div v-if="!isPasswordValid && password" class="invalid-feedback">
+            密碼需包含至少一個大寫字母、小寫字母、數字，且長度需大於 8 個字元
+          </div>
         </div>
         <div v-if="!isLogin" class="mb-3">
           <input
             type="password"
             class="form-control"
+            :class="{
+              'is-invalid': password !== confirmPassword && confirmPassword,
+            }"
             placeholder="確認密碼"
             v-model="confirmPassword"
             required
           />
-        </div>
-        <div v-if="!isLogin" class="mb-3">
-            <span class="font-password">
-                * 密碼需包含至少一個大寫字母、小寫字母、數字，且長度需大於 8 個字元
-            </span>
+          <div
+            v-if="password !== confirmPassword && confirmPassword"
+            class="invalid-feedback"
+          >
+            密碼與確認密碼不符合
+          </div>
         </div>
         <button type="submit" class="btn btn-primary w-100">
           {{ isLogin ? "登入" : "註冊" }}
@@ -63,78 +71,111 @@
 </template>
 
 <script>
+import { ref, computed } from "vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 import axios from "axios";
-import { mapActions } from "vuex";
 
 export default {
   name: "AuthPage",
-  data() {
-    return {
-      isLogin: true,
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      errorMessage: "",
-    };
-  },
-  methods: {
-    ...mapActions(["saveToken"]),
-    async handleSubmit() {
-      if (this.isLogin) {
-        await this.login();
-      } else {
-        await this.registerUser();
-      }
-    },
-    async login() {
-      try {
-        const response = await axios.post("/login", {
-          email: this.email,
-          password: this.password,
-        });
-        this.saveToken(response.data.token);
-        this.errorMessage = "";
-        this.$router.push("/");
-      } catch (error) {
-        this.errorMessage = "登入失敗，請檢查您的帳號或密碼。";
-        this.successMessage = "";
-      }
-      setTimeout(() => {
-        this.errorMessage = "";
-      }, 3000);
-    },
-    async registerUser() {
-      if (this.password !== this.confirmPassword) {
-        this.errorMessage = "密碼與確認密碼不符合";
-        this.successMessage = "";
-        return;
+  setup() {
+    const store = useStore();
+    const router = useRouter();
+
+    const isLogin = ref(true);
+    const name = ref("");
+    const email = ref("");
+    const password = ref("");
+    const confirmPassword = ref("");
+    const errorMessage = ref("");
+    const successMessage = ref("");
+
+    const isPasswordValid = computed(() => {
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+      return passwordRegex.test(password.value);
+    });
+
+    const handleSubmit = async () => {
+      if (!isLogin.value) {
+        if (!isPasswordValid.value) {
+          errorMessage.value = "密碼不符合要求";
+          return;
+        }
+        if (password.value !== confirmPassword.value) {
+          errorMessage.value = "密碼與確認密碼不符合";
+          return;
+        }
       }
 
+      if (isLogin.value) {
+        await login();
+      } else {
+        await registerUser();
+      }
+    };
+
+    const login = async () => {
+      try {
+        const response = await axios.post("/login", {
+          email: email.value,
+          password: password.value,
+        });
+        store.dispatch("saveToken", response.data.token);
+        errorMessage.value = "";
+        router.push("/");
+      } catch (error) {
+        errorMessage.value = "登入失敗，請檢查您的帳號或密碼。";
+        successMessage.value = "";
+      }
+      setTimeout(() => {
+        errorMessage.value = "";
+      }, 3000);
+    };
+
+    const registerUser = async () => {
       try {
         const response = await axios.post("/register", {
-          name: this.name,
-          email: this.email,
-          password: this.password,
+          name: name.value,
+          email: email.value,
+          password: password.value,
         });
         if (response.data.code == 200) {
-          this.isLogin = true;
-          this.successMessage = "註冊成功，請登入";
-          this.errorMessage = "";
+          isLogin.value = true;
+          successMessage.value = "註冊成功，請登入";
+          errorMessage.value = "";
         } else {
-          this.errorMessage = "輸入 E-mail 重複";
-          this.successMessage = "";
+          errorMessage.value = "輸入 E-mail 重複";
+          successMessage.value = "";
         }
       } catch (error) {
-        this.errorMessage = "註冊錯誤";
-        this.successMessage = "";
+        errorMessage.value = "註冊錯誤";
+        successMessage.value = "";
         console.error(error);
       }
-    },
-    toggleForm() {
-      this.isLogin = !this.isLogin;
-      this.errorMessage = "";
-    },
+    };
+
+    const toggleForm = () => {
+      isLogin.value = !isLogin.value;
+      errorMessage.value = "";
+      successMessage.value = "";
+      name.value = "";
+      email.value = "";
+      password.value = "";
+      confirmPassword.value = "";
+    };
+
+    return {
+      isLogin,
+      name,
+      email,
+      password,
+      confirmPassword,
+      errorMessage,
+      successMessage,
+      isPasswordValid,
+      handleSubmit,
+      toggleForm,
+    };
   },
 };
 </script>
@@ -175,7 +216,17 @@ export default {
   color: #4caf50;
   cursor: pointer;
 }
+
 .font-password {
-    color: red;
+  color: red;
+  font-size: 0.8rem;
+}
+
+.invalid-feedback {
+  display: block;
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 0.875em;
+  color: #dc3545;
 }
 </style>
