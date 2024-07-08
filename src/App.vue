@@ -104,7 +104,7 @@
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <li>
-                  <a class="dropdown-item" href="/user/profile">會員資料</a>
+                  <a class="dropdown-item" href="/user/info">會員資料</a>
                 </li>
                 <li>
                   <a class="dropdown-item" href="#" @click="logout">登出</a>

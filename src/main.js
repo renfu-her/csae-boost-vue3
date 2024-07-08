@@ -6,6 +6,7 @@ import ProjectPage from './views/ProjectPage.vue';
 import ProjectViewPage from './views/ProjectViewPage.vue';
 import AuthPage from './views/AuthPage.vue';
 import FeedbackPage from './views/FeedbackPage.vue'; 
+import UserInfo from './views/UserInfo.vue';
 import ProjectEditor from './components/pages/ProjectEditor.vue'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
@@ -24,7 +25,8 @@ const routes = [
   { path: '/user/project/edit/:id', component: ProjectEditor },
   { path: '/user/project/view', component: ProjectViewPage },
   { path: '/join', component: AuthPage },
-  { path: '/feedback', component: FeedbackPage } 
+  { path: '/feedback', component: FeedbackPage }, 
+  { path: '/user/info', component: UserInfo },
 ];
 
 const router = createRouter({
