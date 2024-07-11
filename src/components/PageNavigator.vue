@@ -1,3 +1,25 @@
+<!-- PagePaginator.vue -->
+<template>
+  <nav v-if="totalPages > 1" aria-label="Page navigation">
+    <ul class="pagination">
+      <li class="page-item" :class="{ disabled: currentPage === 1 }">
+        <a class="page-link" href="#" @click.prevent="onPageChange(currentPage - 1)">&laquo; 上一頁</a>
+      </li>
+      <li
+        v-for="page in visiblePages"
+        :key="page"
+        class="page-item"
+        :class="{ active: page === currentPage, disabled: page === '...' }"
+      >
+        <a class="page-link" href="#" @click.prevent="onPageChange(page)">{{ page }}</a>
+      </li>
+      <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+        <a class="page-link" href="#" @click.prevent="onPageChange(currentPage + 1)">下一頁 &raquo;</a>
+      </li>
+    </ul>
+  </nav>
+</template>
+
 <script>
 export default {
   name: 'PageNavigator',
@@ -61,27 +83,6 @@ export default {
 };
 </script>
 
-<!-- PagePaginator.vue -->
-<template>
-  <nav v-if="totalPages > 1" aria-label="Page navigation">
-    <ul class="pagination">
-      <li class="page-item" :class="{ disabled: currentPage === 1 }">
-        <a class="page-link" href="#" @click.prevent="onPageChange(currentPage - 1)">&laquo; 上一頁</a>
-      </li>
-      <li
-        v-for="page in visiblePages"
-        :key="page"
-        class="page-item"
-        :class="{ active: page === currentPage, disabled: page === '...' }"
-      >
-        <a class="page-link" href="#" @click.prevent="onPageChange(page)">{{ page }}</a>
-      </li>
-      <li class="page-item" :class="{ disabled: currentPage === totalPages }">
-        <a class="page-link" href="#" @click.prevent="onPageChange(currentPage + 1)">下一頁 &raquo;</a>
-      </li>
-    </ul>
-  </nav>
-</template>
 
 <style scoped>
 .pagination {
